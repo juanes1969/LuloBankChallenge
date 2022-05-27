@@ -1,0 +1,57 @@
+defaultTasks 'clean', 'test', 'aggregate'
+repositories {
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-gradle-plugin:2.4.24"
+        classpath "net.serenity-bdd:serenity-single-page-report:2.1.7"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+ext {
+    serenityVersion = '2.4.24'
+    serenityCucumberVersion = '2.4.24'
+    cucumberVersion = '6.10.4'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "io.cucumber:cucumber-core:${cucumberVersion}"
+
+    }
+}
+
+dependencies {
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-cucumber6:${serenityCucumberVersion}"
+    implementation "net.serenity-bdd:serenity-junit:$rootProject.ext.serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-rest:${serenityVersion}"
+    implementation group: 'net.serenity-bdd', name: 'serenity-gradle-plugin', version: '2.0.90'
+    implementation 'net.serenity-bdd:serenity-core:2.0.81'
+    implementation group: 'net.serenity-bdd', name: 'serenity-ensure', version: '2.1.4'
+    implementation('org.assertj:assertj-core:3.8.0')
+    implementation "org.json:json:20190722"
+    testImplementation "io.cucumber:cucumber-core:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation 'org.slf4j:slf4j-simple:1.7.36'
+
+}
+
+gradle.startParameter.continueOnFailure = true
